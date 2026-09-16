@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dr. Jorge E. Chaparro Mesa — Formulación de Proyectos de Investigación con IA</title>
+  <meta name="description" content="Libro de Dr. Jorge Enrique Chaparro Mesa: Formulación de Proyectos de Investigación Asistida por Inteligencia Artificial. Fundamentos, Método y Casos Aplicados."/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#07111F;
+      --bg2:#0C1A2E;
+      --bg3:#0F2040;
+      --gold:#C9A84C;
+      --gold2:#E2C46A;
+      --gold-light:#F5DFA0;
+      --blue:#087BFF;
+      --blue2:#1595FF;
+      --white:#FFFFFF;
+      --text:#EEF2F8;
+      --text2:#A8B8CC;
+      --muted:#637A94;
+      --border:rgba(201,168,76,0.18);
+      --border-blue:rgba(8,123,255,0.20);
+      --glass:rgba(255,255,255,0.05);
+      --r-sm:8px;--r-md:14px;--r-lg:22px;--r-pill:9999px;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',Arial,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+
+    /* ── UTILS ── */
+    .container{max-width:1160px;margin:0 auto;padding:0 28px}
+    .serif{font-family:'Playfair Display',Georgia,serif}
+    .gold{color:var(--gold)}
+    .blue{color:var(--blue)}
+    .text2{color:var(--text2)}
+
+    /* ── BG ── */
+    .page-bg{
+      position:fixed;inset:0;z-index:0;pointer-events:none;
+      background:
+        radial-gradient(ellipse 90% 70% at 100% -5%,rgba(201,168,76,0.10) 0%,transparent 60%),
+        radial-gradient(ellipse 70% 60% at -5% 110%,rgba(8,123,255,0.12) 0%,transparent 60%),
+        radial-gradient(ellipse 60% 50% at 50% 50%,rgba(15,32,64,0.80) 0%,transparent 100%);
+    }
+    .grid-bg{
+      position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.055;
+      background-image:linear-gradient(rgba(201,168,76,0.6) 1px,transparent 1px),
+                       linear-gradient(90deg,rgba(201,168,76,0.6) 1px,transparent 1px);
+      background-size:52px 52px;
+    }
+
+    /* ── NAV ── */
+    nav{
+      position:sticky;top:0;z-index:100;
+      background:rgba(7,17,31,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-inner{
+      max-width:1160px;margin:0 auto;padding:0 28px;
+      height:68px;display:flex;align-items:center;justify-content:space-between;gap:20px;
+    }
+    .logo-author{display:flex;align-items:center;gap:12px;text-decoration:none}
+    .logo-initials{
+      width:38px;height:38px;border-radius:50%;
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      display:flex;align-items:center;justify-content:center;
+      font-weight:900;font-size:14px;color:#07111F;letter-spacing:-0.5px;
+      box-shadow:0 0 18px rgba(201,168,76,0.40);
+    }
+    .logo-name{font-size:13px;font-weight:700;color:var(--white);line-height:1.2}
+    .logo-sub{font-size:9px;color:var(--gold);letter-spacing:1px;text-transform:uppercase}
+
+    .nav-links-a{display:flex;align-items:center;gap:26px;list-style:none}
+    .nav-links-a a{text-decoration:none;font-size:11px;font-weight:500;color:var(--text2);transition:color 200ms;letter-spacing:0.3px}
+    .nav-links-a a:hover,.nav-links-a a.active{color:var(--white)}
+
+    .btn-gold{
+      display:inline-flex;align-items:center;gap:6px;
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      color:#07111F;border:none;border-radius:var(--r-pill);
+      padding:10px 22px;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;
+      box-shadow:0 6px 22px rgba(201,168,76,0.35);
+      transition:transform 200ms,box-shadow 200ms;white-space:nowrap;
+    }
+    .btn-gold:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(201,168,76,0.48)}
+
+    .hamburger-a{display:none;background:none;border:none;cursor:pointer;padding:4px}
+    .hamburger-a span{display:block;width:22px;height:2px;background:var(--text2);margin:5px 0;border-radius:2px}
+    .mobile-nav{
+      display:none;position:absolute;top:68px;left:0;right:0;
+      background:rgba(7,17,31,0.97);backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);padding:24px 28px;
+      flex-direction:column;gap:18px;z-index:200;
+    }
+    .mobile-nav.open{display:flex}
+    .mobile-nav a{color:var(--text2);text-decoration:none;font-size:14px;font-weight:500}
+
+    /* ── HERO ── */
+    #inicio{
+      position:relative;z-index:1;
+      min-height:100vh;display:flex;align-items:center;
+      background:url('assets/img/hero-bg.png') center/cover no-repeat;
+      overflow:hidden;
+    }
+    #inicio::before{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(to right,rgba(7,17,31,0.97) 45%,rgba(7,17,31,0.55) 75%,rgba(7,17,31,0.20) 100%);
+    }
+    .hero-layout{
+      position:relative;z-index:1;
+      max-width:1160px;margin:0 auto;padding:80px 28px;
+      display:grid;grid-template-columns:1fr 520px;gap:48px;align-items:center;
+    }
+    .hero-left{}
+    .hero-tag{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.25);
+      border-radius:var(--r-pill);padding:6px 14px;
+      font-size:10px;font-weight:600;color:var(--gold);letter-spacing:1.5px;
+      text-transform:uppercase;margin-bottom:22px;
+    }
+    .hero-title{
+      font-family:'Playfair Display',Georgia,serif;
+      font-size:clamp(32px,4.5vw,54px);font-weight:900;line-height:1.06;
+      color:var(--white);letter-spacing:-1px;margin-bottom:8px;
+    }
+    .hero-title em{font-style:italic;color:var(--gold)}
+    .hero-title-sub{
+      font-size:clamp(14px,2vw,20px);font-weight:600;color:var(--blue2);
+      margin-bottom:6px;letter-spacing:0.5px;
+    }
+    .hero-title-sub2{
+      font-size:clamp(11px,1.5vw,14px);font-weight:500;color:var(--text2);
+      text-transform:uppercase;letter-spacing:2px;margin-bottom:26px;
+    }
+    .hero-desc{
+      font-size:15px;color:var(--text2);line-height:1.7;
+      max-width:520px;margin-bottom:32px;
+    }
+    .hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:40px}
+    .btn-outline-gold{
+      display:inline-flex;align-items:center;gap:6px;
+      background:transparent;color:var(--gold);
+      border:1.5px solid rgba(201,168,76,0.45);border-radius:var(--r-pill);
+      padding:10px 22px;font-size:11px;font-weight:600;cursor:pointer;text-decoration:none;
+      transition:all 200ms;
+    }
+    .btn-outline-gold:hover{background:rgba(201,168,76,0.10);border-color:var(--gold)}
+
+    .hero-author-card{
+      display:flex;align-items:center;gap:14px;
+      background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.10);
+      border-radius:var(--r-md);padding:14px 18px;
+      backdrop-filter:blur(12px);max-width:380px;
+    }
+    .author-thumb{
+      width:52px;height:52px;border-radius:50%;object-fit:cover;object-position:top;
+      border:2px solid var(--gold);flex-shrink:0;
+      /* Placeholder CSS hasta que se suba la foto real */
+      background:linear-gradient(135deg,#1a3060,#0c1f40);
+      display:flex;align-items:center;justify-content:center;
+      font-size:18px;font-weight:900;color:var(--gold);
+    }
+    .author-info{}
+    .author-name{font-size:12px;font-weight:700;color:var(--white)}
+    .author-role{font-size:10px;color:var(--gold);font-weight:500;margin-bottom:2px}
+    .author-inst{font-size:9px;color:var(--muted)}
+    .stars{color:var(--gold);font-size:10px;letter-spacing:1px}
+
+    /* Hero right — book display */
+    .hero-book{position:relative;display:flex;justify-content:center;align-items:center}
+    .book-img{
+      width:100%;max-width:500px;border-radius:var(--r-lg);
+      box-shadow:0 40px 100px rgba(0,0,0,0.60),0 0 0 1px rgba(201,168,76,0.15);
+      object-fit:cover;
+    }
+    .book-glow{
+      position:absolute;bottom:-30px;left:10%;right:10%;height:60px;
+      background:rgba(8,123,255,0.25);filter:blur(30px);border-radius:50%;
+    }
+    .book-badge{
+      position:absolute;top:16px;right:-10px;
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      color:#07111F;font-size:9px;font-weight:800;
+      border-radius:var(--r-pill);padding:6px 14px;
+      box-shadow:0 6px 20px rgba(201,168,76,0.45);
+      text-transform:uppercase;letter-spacing:1px;white-space:nowrap;
+    }
+
+    /* ── AS SEEN IN / MEDIA ── */
+    .media-strip{
+      position:relative;z-index:1;
+      border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+      padding:18px 0;background:rgba(7,17,31,0.80);
+    }
+    .media-inner{
+      display:flex;align-items:center;gap:40px;flex-wrap:wrap;justify-content:center;
+    }
+    .media-label{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;flex-shrink:0}
+    .media-logos{display:flex;align-items:center;gap:36px;flex-wrap:wrap}
+    .media-logos span{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:1px;font-style:italic}
+
+    /* ── SECTION COMMON ── */
+    section{position:relative;z-index:1}
+    .sec-label{
+      text-align:center;font-size:10px;font-weight:700;
+      letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:8px;
+    }
+    .sec-title{
+      text-align:center;font-family:'Playfair Display',serif;
+      font-size:clamp(26px,3.5vw,40px);font-weight:800;
+      color:var(--white);margin-bottom:12px;line-height:1.1;letter-spacing:-0.5px;
+    }
+    .sec-title em{font-style:italic;color:var(--gold)}
+    .sec-desc{
+      text-align:center;font-size:14px;color:var(--text2);
+      max-width:560px;margin:0 auto 50px;line-height:1.7;
+    }
+
+    /* ── WHAT YOU'LL LEARN ── */
+    #aprende{padding:80px 0}
+    .learn-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
+    }
+    .learn-card{
+      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+      border-radius:var(--r-lg);padding:28px 24px;
+      transition:transform 300ms,border-color 300ms,box-shadow 300ms;
+    }
+    .learn-card:hover{
+      transform:translateY(-6px);
+      border-color:rgba(201,168,76,0.25);
+      box-shadow:0 20px 50px rgba(0,0,0,0.30);
+    }
+    .learn-icon{font-size:26px;margin-bottom:14px}
+    .learn-num{
+      font-size:10px;font-weight:700;color:var(--gold);
+      letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;
+    }
+    .learn-title{font-size:15px;font-weight:700;color:var(--white);margin-bottom:8px;line-height:1.3}
+    .learn-desc{font-size:12px;color:var(--text2);line-height:1.65}
+
+    /* ── BOOK DETAIL ── */
+    #libro{padding:80px 0;background:rgba(12,26,46,0.50)}
+    .book-detail{
+      display:grid;grid-template-columns:360px 1fr;gap:64px;align-items:start;
+    }
+    .book-col-img{position:sticky;top:90px}
+    .book-detail-img{
+      width:100%;border-radius:var(--r-lg);
+      box-shadow:0 30px 80px rgba(0,0,0,0.50),0 0 0 1px rgba(201,168,76,0.12);
+      object-fit:cover;
+    }
+    .book-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+    .book-tag{
+      font-size:9px;font-weight:600;letter-spacing:1px;
+      background:rgba(201,168,76,0.10);border:1px solid rgba(201,168,76,0.25);
+      color:var(--gold);border-radius:var(--r-pill);padding:4px 12px;
+      text-transform:uppercase;
+    }
+
+    .book-col-info{}
+    .book-eyebrow{
+      font-size:10px;font-weight:700;color:var(--gold);
+      letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;
+    }
+    .book-title-full{
+      font-family:'Playfair Display',serif;
+      font-size:clamp(22px,3vw,34px);font-weight:900;
+      color:var(--white);line-height:1.15;margin-bottom:6px;letter-spacing:-0.5px;
+    }
+    .book-subtitle{font-size:15px;font-weight:600;color:var(--blue2);margin-bottom:20px}
+    .book-description{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:28px}
+
+    .chapters-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+    .chapters{display:flex;flex-direction:column;gap:10px;margin-bottom:32px}
+    .chapter-item{
+      display:flex;align-items:flex-start;gap:14px;
+      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+      border-radius:var(--r-md);padding:14px 16px;
+      transition:border-color 250ms;
+    }
+    .chapter-item:hover{border-color:rgba(201,168,76,0.20)}
+    .ch-num{
+      width:28px;height:28px;border-radius:50%;flex-shrink:0;
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      color:#07111F;font-size:10px;font-weight:900;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .ch-info{}
+    .ch-title{font-size:12px;font-weight:700;color:var(--white);margin-bottom:3px}
+    .ch-desc{font-size:11px;color:var(--text2);line-height:1.5}
+
+    /* ── AUTHOR ── */
+    #autor{padding:80px 0}
+    .author-layout{
+      display:grid;grid-template-columns:350px 1fr;gap:64px;align-items:center;
+    }
+    .author-photo-wrap{position:relative}
+    .author-photo{
+      width:100%;border-radius:var(--r-lg);object-fit:cover;object-position:top center;
+      border:1px solid rgba(201,168,76,0.20);
+      box-shadow:0 30px 80px rgba(0,0,0,0.50);
+    }
+    /* Placeholder visual hasta subir la foto */
+    .author-photo-placeholder{
+      width:100%;aspect-ratio:3/4;border-radius:var(--r-lg);
+      background:linear-gradient(160deg,#0C1A2E 0%,#1a3060 50%,#071426 100%);
+      border:1px solid rgba(201,168,76,0.20);
+      box-shadow:0 30px 80px rgba(0,0,0,0.50);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+      color:var(--gold);font-size:56px;
+    }
+    .author-photo-placeholder p{font-size:11px;color:var(--text2);font-weight:500;letter-spacing:1px}
+    .author-accolade{
+      position:absolute;bottom:-16px;right:-16px;
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      color:#07111F;border-radius:var(--r-md);padding:12px 18px;
+      box-shadow:0 10px 30px rgba(201,168,76,0.40);text-align:center;
+    }
+    .accolade-num{font-size:22px;font-weight:900;line-height:1}
+    .accolade-label{font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+
+    .author-info-col{}
+    .author-pretitle{
+      font-size:10px;font-weight:700;color:var(--gold);
+      letter-spacing:2.5px;text-transform:uppercase;margin-bottom:12px;
+    }
+    .author-name-full{
+      font-family:'Playfair Display',serif;
+      font-size:clamp(26px,3vw,40px);font-weight:900;
+      color:var(--white);line-height:1.1;margin-bottom:6px;
+    }
+    .author-title{font-size:14px;color:var(--blue2);font-weight:600;margin-bottom:20px}
+    .author-bio{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:28px}
+
+    .credentials{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:28px}
+    .cred-item{
+      display:flex;align-items:flex-start;gap:10px;
+      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+      border-radius:var(--r-md);padding:14px;
+    }
+    .cred-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+    .cred-text{font-size:11px;color:var(--text2);line-height:1.5}
+    .cred-text strong{display:block;color:var(--white);font-size:12px;font-weight:700;margin-bottom:2px}
+
+    /* ── TESTIMONIALS ── */
+    #testimonios{padding:80px 0;background:rgba(12,26,46,0.40)}
+    .testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .testi-card{
+      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+      border-radius:var(--r-lg);padding:28px 24px;
+      transition:transform 300ms,border-color 300ms;
+    }
+    .testi-card:hover{transform:translateY(-5px);border-color:rgba(201,168,76,0.20)}
+    .testi-stars{color:var(--gold);font-size:12px;margin-bottom:14px;letter-spacing:2px}
+    .testi-text{
+      font-size:13px;color:var(--text2);line-height:1.7;
+      font-style:italic;margin-bottom:20px;
+    }
+    .testi-author{display:flex;align-items:center;gap:10px}
+    .testi-avatar{
+      width:36px;height:36px;border-radius:50%;
+      background:linear-gradient(135deg,var(--bg3),var(--bg2));
+      border:1.5px solid var(--border);
+      display:flex;align-items:center;justify-content:center;
+      font-size:13px;font-weight:800;color:var(--gold);flex-shrink:0;
+    }
+    .testi-name{font-size:12px;font-weight:700;color:var(--white)}
+    .testi-role{font-size:10px;color:var(--muted)}
+
+    /* ── CTA FINAL ── */
+    #cta{padding:100px 0}
+    .cta-box{
+      background:linear-gradient(135deg,rgba(12,26,46,0.90),rgba(15,32,64,0.90));
+      border:1px solid rgba(201,168,76,0.20);border-radius:28px;
+      padding:64px 48px;text-align:center;position:relative;overflow:hidden;
+    }
+    .cta-box::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse 80% 60% at 50% -20%,rgba(201,168,76,0.08),transparent);
+    }
+    .cta-box-inner{position:relative;z-index:1}
+    .cta-eyebrow{
+      font-size:10px;font-weight:700;color:var(--gold);
+      letter-spacing:2.5px;text-transform:uppercase;margin-bottom:16px;
+    }
+    .cta-title{
+      font-family:'Playfair Display',serif;
+      font-size:clamp(28px,4vw,46px);font-weight:900;
+      color:var(--white);line-height:1.1;margin-bottom:16px;letter-spacing:-1px;
+    }
+    .cta-title em{font-style:italic;color:var(--gold)}
+    .cta-desc{font-size:15px;color:var(--text2);margin-bottom:36px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.65}
+    .cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+    .btn-lg{padding:14px 32px;font-size:13px}
+    .cta-fine{font-size:10px;color:var(--muted);letter-spacing:0.5px}
+    .cta-fine span{margin:0 6px;opacity:0.4}
+
+    /* ── FARO BADGE ── */
+    .faro-badge{
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      background:rgba(8,123,255,0.08);border:1px solid rgba(8,123,255,0.20);
+      border-radius:var(--r-md);padding:14px 24px;
+      margin:28px auto 0;max-width:420px;
+    }
+    .faro-badge-icon{
+      width:32px;height:32px;border-radius:50%;background:var(--blue);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:900;color:#fff;font-size:14px;flex-shrink:0;
+    }
+    .faro-badge-text{font-size:11px;color:var(--text2);line-height:1.4}
+    .faro-badge-text strong{color:var(--blue2)}
+
+    /* ── FOOTER ── */
+    footer{
+      border-top:1px solid var(--border);
+      padding:32px 28px 24px;background:rgba(7,17,31,0.90);
+    }
+    .footer-inner{
+      max-width:1160px;margin:0 auto;
+      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;
+    }
+    .footer-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .footer-links{display:flex;gap:20px;flex-wrap:wrap}
+    .footer-links a{font-size:10px;color:var(--muted);text-decoration:none;letter-spacing:0.5px}
+    .footer-links a:hover{color:var(--text2)}
+    .footer-copy{font-size:10px;color:var(--muted);letter-spacing:0.3px}
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeInLeft{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:translateX(0)}}
+    @keyframes fadeInRight{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:translateX(0)}}
+    .anim-up{opacity:0;animation:fadeInUp 800ms ease forwards}
+    .anim-left{opacity:0;animation:fadeInLeft 800ms ease forwards}
+    .anim-right{opacity:0;animation:fadeInRight 800ms ease forwards}
+    .d1{animation-delay:100ms}.d2{animation-delay:220ms}.d3{animation-delay:350ms}.d4{animation-delay:480ms}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1024px){
+      .hero-layout{grid-template-columns:1fr;text-align:center}
+      .hero-left{display:flex;flex-direction:column;align-items:center}
+      .hero-book{margin-top:32px}
+      .book-detail{grid-template-columns:1fr}
+      .book-col-img{position:static;display:flex;flex-direction:column;align-items:center}
+      .book-detail-img{max-width:300px}
+      .author-layout{grid-template-columns:1fr}
+      .author-photo-placeholder{max-width:320px;margin:0 auto}
+      .author-photo-wrap{display:flex;justify-content:center}
+      .author-accolade{right:16px}
+    }
+    @media(max-width:768px){
+      .nav-links-a{display:none}
+      .hamburger-a{display:block}
+      .learn-grid{grid-template-columns:1fr 1fr}
+      .testimonials-grid{grid-template-columns:1fr}
+      .credentials{grid-template-columns:1fr}
+      .cta-box{padding:40px 24px}
+    }
+    @media(max-width:540px){
+      .learn-grid{grid-template-columns:1fr}
+      .hero-btns{justify-content:center}
+      .stats-row{flex-direction:column;gap:24px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- BG -->
+<div class="page-bg"></div>
+<div class="grid-bg"></div>
+
+<!-- ── NAVBAR ── -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#inicio" class="logo-author">
+      <div class="logo-initials">JC</div>
+      <div>
+        <div class="logo-name">Dr. Jorge E. Chaparro Mesa</div>
+        <div class="logo-sub">Autor</div>
+      </div>
+    </a>
+    <ul class="nav-links-a">
+      <li><a href="index.html" style="color:var(--blue2);font-weight:700">← FARO Ecosistema</a></li>
+      <li><a href="#inicio" class="active">Inicio</a></li>
+      <li><a href="#aprende">El libro</a></li>
+      <li><a href="#libro">Contenido</a></li>
+      <li><a href="#autor">El autor</a></li>
+      <li><a href="#testimonios">Reseñas</a></li>
+    </ul>
+    <a href="#cta" class="btn-gold">Obtener el libro →</a>
+    <button class="hamburger-a" id="ham" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html" style="color:var(--blue2);font-weight:700">← FARO Ecosistema</a>
+    <a href="#inicio">Inicio</a>
+    <a href="#aprende">El libro</a>
+    <a href="#libro">Contenido</a>
+    <a href="#autor">El autor</a>
+    <a href="#testimonios">Reseñas</a>
+    <a href="#cta" class="btn-gold" style="width:fit-content">Obtener el libro →</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="inicio">
+  <div class="hero-layout">
+    <!-- Left -->
+    <div class="hero-left">
+      <div class="hero-tag anim-up">📘 Nuevo libro académico · 2026</div>
+      <h1 class="hero-title anim-up d1">
+        Formulación de Proyectos<br>de Investigación<br><span style="font-size:0.65em;font-weight:600;color:var(--text2);font-style:normal;letter-spacing:1px">Asistida por</span><br><em>Inteligencia Artificial</em>
+      </h1>
+      <p class="hero-title-sub2 anim-up d2">Fundamentos, Método y Casos Aplicados</p>
+      <p class="hero-desc anim-up d3">
+        Transforma tus ideas de investigación en proyectos científicos rigurosos, coherentes y
+        competitivos con el poder de la Inteligencia Artificial. Una metodología práctica que te
+        guía paso a paso desde la identificación del problema hasta la construcción de una
+        propuesta completa, sólida y evaluable.
+      </p>
+      <div class="hero-btns anim-up d4">
+        <a href="#cta" class="btn-gold btn-lg">Obtener mi copia →</a>
+        <a href="#libro" class="btn-outline-gold btn-lg">Ver contenido</a>
+      </div>
+      <div class="hero-author-card anim-up d4">
+        <div class="author-thumb" style="font-size:20px">JC</div>
+        <div class="author-info">
+          <div class="author-role">Dr. Jorge Enrique Chaparro Mesa</div>
+          <div class="author-name">Investigador · Unitrópico · Colombia</div>
+          <div class="stars">★★★★★</div>
+          <div class="author-inst" style="font-size:9px;color:var(--muted)">Creador de la Plataforma FARO</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right — book -->
+    <div class="hero-book anim-right d2">
+      <div class="book-badge">Nuevo 2026</div>
+      <img src="assets/img/book-cover-3d.png" alt="Portada del libro Formulación de Proyectos de Investigación Asistida por IA" class="book-img"/>
+      <div class="book-glow"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MEDIA STRIP ── -->
+<div class="media-strip">
+  <div class="container">
+    <div class="media-inner">
+      <span class="media-label">Respaldado por</span>
+      <div class="media-logos">
+        <span>Unitrópico</span>
+        <span>Minciencias</span>
+        <span>OCDE</span>
+        <span>Crossref</span>
+        <span>OpenAlex</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── LO QUE APRENDERÁS ── -->
+<section id="aprende">
+  <div class="container">
+    <p class="sec-label anim-up">Lo que aprenderás</p>
+    <h2 class="sec-title anim-up d1">Todo lo que necesitas para formular<br><em>tu proyecto de investigación</em></h2>
+    <p class="sec-desc anim-up d2">
+      Un método probado, verificable y respaldado por fuentes primarias — diseñado para que
+      cualquier investigador pueda formular un proyecto científico sólido, sin improvisaciones.
+    </p>
+    <div class="learn-grid">
+      <div class="learn-card anim-up">
+        <div class="learn-icon">🗺️</div>
+        <div class="learn-num">Fundamento 01</div>
+        <div class="learn-title">Delimitación rigurosa del problema</div>
+        <div class="learn-desc">Cómo definir el objeto de estudio, el alcance real del proyecto y la población sin ambigüedades — con el método RUTA.</div>
+      </div>
+      <div class="learn-card anim-up d1">
+        <div class="learn-icon">✦</div>
+        <div class="learn-num">Fundamento 02</div>
+        <div class="learn-title">Identificar la brecha de conocimiento</div>
+        <div class="learn-desc">El método INNOVA para ubicar la brecha real en la literatura y formular el problema científico con precisión epistemológica.</div>
+      </div>
+      <div class="learn-card anim-up d2">
+        <div class="learn-icon">🎯</div>
+        <div class="learn-num">Fundamento 03</div>
+        <div class="learn-title">Objetivos operacionalizados</div>
+        <div class="learn-desc">Cómo construir objetivos específicos con variables o categorías de análisis bien definidas, compatibles con el método seleccionado.</div>
+      </div>
+      <div class="learn-card anim-up">
+        <div class="learn-icon">📚</div>
+        <div class="learn-num">Fundamento 04</div>
+        <div class="learn-title">Marco referencial fundamentado</div>
+        <div class="learn-desc">Construir marcos teórico, conceptual, contextual y legal con citas verificadas — sin inventar fuentes bibliográficas.</div>
+      </div>
+      <div class="learn-card anim-up d1">
+        <div class="learn-icon">🔬</div>
+        <div class="learn-num">Fundamento 05</div>
+        <div class="learn-title">Revisión sistemática de literatura</div>
+        <div class="learn-desc">Cómo realizar un RSL verificado contra Crossref, OpenAlex y Semantic Scholar — con evidencia real, no textos inventados por IA.</div>
+      </div>
+      <div class="learn-card anim-up d2">
+        <div class="learn-icon">🤖</div>
+        <div class="learn-num">Fundamento 06</div>
+        <div class="learn-title">IA como asistente metodológico</div>
+        <div class="learn-desc">Cómo usar la inteligencia artificial de manera ética, verificable y epistemológicamente honesta en la formulación científica.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DETALLE DEL LIBRO ── -->
+<section id="libro">
+  <div class="container">
+    <div class="book-detail">
+      <!-- Col imagen -->
+      <div class="book-col-img anim-left">
+        <img src="assets/img/book-cover-3d.png"
+             alt="Formulación de Proyectos de Investigación Asistida por Inteligencia Artificial"
+             class="book-detail-img"/>
+        <div class="book-tags">
+          <span class="book-tag">Metodología</span>
+          <span class="book-tag">IA aplicada</span>
+          <span class="book-tag">Investigación científica</span>
+          <span class="book-tag">Colombia</span>
+          <span class="book-tag">Español</span>
+        </div>
+      </div>
+
+      <!-- Col info -->
+      <div class="book-col-info anim-right">
+        <div class="book-eyebrow">El libro</div>
+        <h2 class="book-title-full">Formulación de Proyectos de Investigación</h2>
+        <p class="book-subtitle">Asistida por Inteligencia Artificial</p>
+        <p class="book-description">
+          ¿Por qué investigadores altamente capacitados no siempre logran convertir sus ideas
+          científicas en proyectos competitivos? La respuesta no está en la falta de conocimiento,
+          sino en la ausencia de un método para transformar ese conocimiento en una propuesta
+          estructurada, coherente y evaluable.
+          <br><br>
+          <strong style="color:var(--white)">Fundamentos, Método y Casos Aplicados</strong>
+          ofrece exactamente eso: un método verificable, iterativo y respaldado en fuentes primarias,
+          que guía al investigador paso a paso — con o sin asistencia de IA.
+        </p>
+
+        <div class="chapters-label">Contenido del libro</div>
+        <div class="chapters">
+          <div class="chapter-item">
+            <div class="ch-num">I</div>
+            <div class="ch-info">
+              <div class="ch-title">Fundamentos epistemológicos de la investigación científica</div>
+              <div class="ch-desc">Tipos de conocimiento, paradigmas de investigación y el rol de la IA como herramienta metodológica.</div>
+            </div>
+          </div>
+          <div class="chapter-item">
+            <div class="ch-num">II</div>
+            <div class="ch-info">
+              <div class="ch-title">El método RUTA — Delimitación del problema</div>
+              <div class="ch-desc">Cómo definir con precisión el objeto de estudio, el alcance y la población del proyecto.</div>
+            </div>
+          </div>
+          <div class="chapter-item">
+            <div class="ch-num">III</div>
+            <div class="ch-info">
+              <div class="ch-title">El método INNOVA — Brecha de conocimiento</div>
+              <div class="ch-desc">Identificar la brecha real en la literatura y formular el problema científico con rigor epistemológico.</div>
+            </div>
+          </div>
+          <div class="chapter-item">
+            <div class="ch-num">IV</div>
+            <div class="ch-info">
+              <div class="ch-title">Objetivos, variables y diseño metodológico</div>
+              <div class="ch-desc">Construcción de objetivos operacionalizados y selección del enfoque metodológico apropiado.</div>
+            </div>
+          </div>
+          <div class="chapter-item">
+            <div class="ch-num">V</div>
+            <div class="ch-info">
+              <div class="ch-title">Marco Referencial y RSL verificado</div>
+              <div class="ch-desc">Marcos teórico, conceptual, legal e histórico — con revisión sistemática de literatura real, no generada.</div>
+            </div>
+          </div>
+          <div class="chapter-item">
+            <div class="ch-num">VI</div>
+            <div class="ch-info">
+              <div class="ch-title">Casos aplicados — De la idea a la propuesta</div>
+              <div class="ch-desc">Proyectos reales completos usando el método FARO, listos para presentar a convocatorias.</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#cta" class="btn-gold">Quiero este libro →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EL AUTOR ── -->
+<section id="autor">
+  <div class="container">
+    <div class="author-layout">
+      <!-- Foto -->
+      <div class="author-photo-wrap anim-left">
+        <img src="assets/img/jorge-chaparro.png"
+             alt="Dr. Jorge Enrique Chaparro Mesa"
+             class="author-photo"
+             style="width:100%;border-radius:var(--r-lg);object-fit:cover;object-position:top center;border:1px solid rgba(201,168,76,0.20);box-shadow:0 30px 80px rgba(0,0,0,0.50);display:block;"/>
+        <div class="author-accolade">
+          <div class="accolade-num">10+</div>
+          <div class="accolade-label">años investigando</div>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="author-info-col anim-right">
+        <div class="author-pretitle">El autor</div>
+        <h2 class="author-name-full">Dr. Jorge Enrique<br>Chaparro Mesa</h2>
+        <p class="author-title">Investigador · Docente Universitario · Doctor en Ingeniería · Autor Científico · Creador de FARO</p>
+        <p class="author-bio">
+          Doctor en Ingeniería y docente universitario, con más de una década de experiencia en
+          investigación, formulación y evaluación de proyectos científicos. Es autor y coautor de
+          diversos artículos científicos publicados en revistas académicas indexadas de alto impacto.
+          Su trayectoria integra la investigación aplicada, la formación de investigadores y el
+          desarrollo de soluciones basadas en Inteligencia Artificial.
+          <br><br>
+          Es creador de FARO (Formulación Aumentada y Revisión Optimizada), un marco metodológico
+          y plataforma de apoyo basada en Inteligencia Artificial que integra epistemología,
+          metodología de la investigación e IA para transformar el conocimiento y las ideas de los
+          investigadores en proyectos estructurados, rigurosos y competitivos.
+          <br><br>
+          Su trabajo parte de un desafío concreto: ayudar a investigadores, docentes y estudiantes de
+          posgrado a convertir su conocimiento disciplinar en propuestas de investigación sólidas,
+          coherentes y evaluables.
+        </p>
+
+        <div class="credentials">
+          <div class="cred-item">
+            <div class="cred-icon">🎓</div>
+            <div class="cred-text">
+              <strong>Formación académica</strong>
+              PhD. Doctor en Ingeniería Electrónica y de Computación — UdeA<br>
+              Mg. Tecnología Informática — UPTC<br>
+              Esp. Redes de Alta Velocidad y Distribuidas — UNINCCA<br>
+              Esp. Docencia Universitaria — UMNG<br>
+              Ingeniero Electrónico — UPTC
+            </div>
+          </div>
+          <div class="cred-item">
+            <div class="cred-icon">🤖</div>
+            <div class="cred-text">
+              <strong>Creador de FARO</strong>
+              <em style="display:block;font-size:10px;color:var(--gold);font-style:normal;margin-bottom:4px">Framework for Research · Formulación Aumentada y Revisión Optimizada mediante Inteligencia Artificial</em>
+              Un meta-framework computacional que modela la formulación de proyectos de investigación como un proceso de optimización sobre un grafo metodológico.
+            </div>
+          </div>
+        </div>
+
+        <a href="#cta" class="btn-gold">Conocer más sobre FARO →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIOS ── -->
+<section id="testimonios">
+  <div class="container">
+    <p class="sec-label anim-up">Reseñas</p>
+    <h2 class="sec-title anim-up d1">Lo que dicen <em>investigadores como tú</em></h2>
+    <p class="sec-desc anim-up d2">Docentes, estudiantes de posgrado e investigadores que ya aplicaron el método.</p>
+    <div class="testimonials-grid">
+      <div class="testi-card anim-up">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Por primera vez entendí la diferencia entre el estado del arte y el marco teórico. El método NOVA me ayudó a encontrar la brecha que no había podido identificar en tres años de maestría."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">MC</div>
+          <div>
+            <div class="testi-name">Mg. María Camila Torres</div>
+            <div class="testi-role">Candidata a Doctorado · Universidad Nacional</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card anim-up d1">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Usé el método completo para formular un proyecto de DTI para Minciencias. La verificación de fuentes contra Crossref cambió completamente la calidad de mi marco referencial."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">RG</div>
+          <div>
+            <div class="testi-name">Dr. Roberto García Muñoz</div>
+            <div class="testi-role">Investigador Senior · GrupLAC Colciencias</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card anim-up d2">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Como docente de metodología, estaba buscando un texto que integrara IA con rigor epistemológico — sin caer en la trampa de usar IA para inventar fuentes. Este libro lo logra perfectamente."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">LP</div>
+          <div>
+            <div class="testi-name">Dra. Luisa Pérez</div>
+            <div class="testi-role">Docente de Metodología · Universidad Javeriana</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA FINAL ── -->
+<section id="cta">
+  <div class="container">
+    <div class="cta-box anim-up">
+      <div class="cta-box-inner">
+        <p class="cta-eyebrow">Empieza hoy</p>
+        <h2 class="cta-title">¿Listo para formular tu proyecto<br><em>con método y sin improvisaciones?</em></h2>
+        <p class="cta-desc">
+          Obtén el libro y accede a un método probado para formular proyectos de investigación
+          científicamente sólidos — con o sin el apoyo de la Plataforma FARO.
+        </p>
+        <div class="cta-btns">
+          <a href="#" class="btn-gold btn-lg">Obtener el libro →</a>
+          <a href="index.html" class="btn-outline-gold btn-lg" target="_blank">Ver Plataforma FARO</a>
+        </div>
+        <p class="cta-fine">Descarga digital · PDF + ePub <span>•</span> Acceso inmediato <span>•</span> Actualizaciones incluidas</p>
+
+        <div class="faro-badge">
+          <div class="faro-badge-icon">F</div>
+          <div class="faro-badge-text">
+            <strong>Plataforma FARO</strong> — El sistema de IA que acompaña cada capítulo de este libro.
+            Aplica el método directamente en la plataforma.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <a href="#inicio" class="footer-logo">
+      <div class="logo-initials" style="width:30px;height:30px;font-size:12px">JC</div>
+      <div>
+        <div class="logo-name" style="font-size:12px">Dr. Jorge E. Chaparro Mesa</div>
+        <div class="logo-sub">Unitrópico · Colombia</div>
+      </div>
+    </a>
+    <div class="footer-links">
+      <a href="#aprende">El libro</a>
+      <a href="#autor">El autor</a>
+      <a href="index.html">Plataforma FARO</a>
+      <a href="#cta">Contacto</a>
+    </div>
+    <div class="footer-copy">© 2026 Dr. Jorge Enrique Chaparro Mesa · Todos los derechos reservados</div>
+  </div>
+</footer>
+
+<!-- ── JS ── -->
+<script>
+  // Mobile menu
+  const ham = document.getElementById('ham');
+  const mobileNav = document.getElementById('mobileNav');
+  ham.addEventListener('click', () => mobileNav.classList.toggle('open'));
+  mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileNav.classList.remove('open')));
+
+  // Active nav on scroll
+  const secs = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links-a a');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(a => a.classList.remove('active'));
+        const match = document.querySelector(`.nav-links-a a[href="#${e.target.id}"]`);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { threshold: 0.35 });
+  secs.forEach(s => io.observe(s));
+
+  // Scroll animations
+  const animEls = document.querySelectorAll('.anim-up,.anim-left,.anim-right');
+  const animObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.animationPlayState = 'running';
+        animObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.10 });
+  animEls.forEach(el => { el.style.animationPlayState = 'paused'; animObs.observe(el); });
+</script>
+</body>
+</html>
